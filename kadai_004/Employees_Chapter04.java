@@ -21,23 +21,23 @@ public class Employees_Chapter04 {
                 "Okamo@0180"
             );
 
-            System.out.println("データベース接続成功");
+            System.out.println("データベース接続成功:"+con);
 
             // SQLクエリを準備
             statement = con.createStatement();
             String sql = """
-                         CREATE TABLE users (
+                         CREATE TABLE employees (
                            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                            name VARCHAR(60) NOT NULL,
                            email VARCHAR(255) NOT NULL,
                            age INT(11),
-                           adress VARCHAR(255)
+                           address VARCHAR(255)
                          );
                          """;
 
             //　SQLクエリを実行（DBMSに送信）
             int rowCnt = statement.executeUpdate(sql);
-            System.out.println("テーブルを作成:rowCnt=" + rowCnt );
+            System.out.println("社員テーブルを作成しました:更新レコード数=" + rowCnt );
         } catch(SQLException e) {
             System.out.println("エラー発生：" + e.getMessage());
         } finally {

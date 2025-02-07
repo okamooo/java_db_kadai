@@ -17,17 +17,7 @@ public class Posts_Chapter07 {
         PreparedStatement statement = null;
         Statement statement2 =null;
         
-        // ユーザーリスト
-        String[][] postList = {
-            
-        	{ "1003","2023-02-08","昨日の夜は徹夜でした・・", "13" },
-            { "1002","2023-02-08","お疲れ様です！", "12" },
-            { "1003","2023-02-09","今日も頑張ります！", "18" },
-            { "1001","2023-02-09","無理は禁物ですよ！", "17" },
-            { "1002","2023-02-10","明日から連休ですね！", "20" }
-     
-        };
-
+        
         try {
             // データベースに接続
             con = DriverManager.getConnection(
@@ -39,23 +29,22 @@ public class Posts_Chapter07 {
             System.out.println("データベース接続成功:"+con);
             
             // SQLクエリを準備
-            String sql = "INSERT INTO posts ( user_id, posted_at, post_content, likes) VALUES (?, ?, ?, ?);";
+            String sql = "INSERT INTO posts ( user_id, posted_at, post_content, likes) VALUES "
+            		+ "(\"1001\",\"2023-02-09\",\"無理は禁物ですよ！\", \"17\"),"
+            		+ "(\"1002\",\"2023-02-08\",\"お疲れ様です！\", \"12\"),"
+            		+ "(\"1002\",\"2023-02-10\",\"明日から連休ですね！\", \"20\"),"
+            		+ "(\"1003\",\"2023-02-08\",\"昨日の夜は徹夜でした・・\", \"13\"),"
+            		+ "(\"1003\",\"2023-02-09\",\"今日も頑張ります！\", \"18\");";
             statement = con.prepareStatement(sql);
             
             int rowCnt = 0;
-            for( int i = 0; i < postList.length; i++ ) {
-                // SQLクエリの「?」部分をリストのデータに置き換え
-                statement.setString(1, postList[i][0]); 
-                statement.setString(2, postList[i][1]); 
-                statement.setString(3, postList[i][2]); 
-                statement.setString(4, postList[i][3]); 
-                
+            
                 rowCnt = statement.executeUpdate();
 
-            }
+            
             
             System.out.println("レコード追加を実行します");
-            System.out.println(postList.length + "件のレコードが追加されました"); 
+            System.out.println( rowCnt + "件のレコードが追加されました"); 
             
             
             String sql2 = "SELECT posted_at,post_content,likes FROM posts WHERE user_id=1002";
@@ -63,11 +52,13 @@ public class Posts_Chapter07 {
             
             ResultSet result = statement2.executeQuery(sql2);
             
+            System.out.println("ユーザーIDが1002のレコードを検索しました");
+            
             while (result.next()) {
                 Date posteAt = result.getDate("posted_at");
                 String content = result.getString("post_content"); 
                 int likes = result.getInt("likes");
-                
+             
                 System.out.println(result.getRow() + "件目:投稿日時=" + posteAt + "/投稿内容=" + content + "/いいね数=" + likes);
             }
             
